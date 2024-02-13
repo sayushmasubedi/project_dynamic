@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <header>
+      <div class="logo">Sayusma <span>Records</span> </div>
+    </header>
+    <meta charset="utf-8" />
+    <title>Student Records</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="container">
+    <h2>View Student Records</h2>
+    <button onclick="fetchRecords()">Fetch Records</button>
+    <div id="container"></div>
+    <a type="button" href="create.html">Add student record</a>
+  </div>
+  <footer>
+    Sayusma Records 2024 &copy 
+  </footer>
+    <script>
+      function fetchRecords() {
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              let records = JSON.parse(xhr.responseText);
+              let tableHTML =
+                "<table border='1'><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Marks</th><th>Grade</th></tr>";
+              for (let i = 0; i < records.length; i++) {
+                tableHTML +=
+                  "<tr><td>" +
+                  records[i].id +
+                  "</td><td>" +
+                  records[i].first_name +
+                  "</td><td>" +
+                  records[i].last_name +
+                  "</td><td>" +
+                  records[i].marks +
+                  "</td><td>" +
+                  records[i].grade +
+                  "</td></tr>";
+              }
+              tableHTML += "</table>";
+              document.getElementById("container").innerHTML = tableHTML;
+            } else {
+              console.error("Error:", xhr.status);
+            }
+          }
+        };
+
+        xhr.open("GET", "students/read.php", true);
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
